@@ -1,0 +1,49 @@
+{
+	"name": "phaser3-parcel-typescript",
+	"version": "1.0.0",
+	"description": "A template to use phaser with typescript and parcel bundler",
+	"main": "src/index.ts",
+	"repository": "git@github.com:tweenn/phaser3-parcel-typescript.git",
+	"author": "Felipe Zuntini <felipezuntini@hotmail.com>",
+	"license": "MIT",
+	"private": false,
+	"scripts": {
+		"clean:dist": "rm -rf ./dist/",
+		"clean:cache": "rm -rf ./.parcel-cache",
+		"clean": "yarn clean:dist && yarn clean:cache",
+		"build": "yarn clean && parcel build --target prod",
+		"serve": "yarn clean && parcel --target dev --port 1234",
+		"deploy": "yarn build --public-url ../phaser3-parcel-typescript && push-dir --dir=dist --branch=gh-pages --force --cleanup"
+	},
+	"targets": {
+		"dev": {
+			"optimize": false,
+			"source": [
+				"src/404.html"
+			],
+			"distDir": "./dist",
+			"context": "browser"
+		},
+		"prod": {
+			"optimize": true,
+			"source": [
+				"src/404.html"
+			],
+			"distDir": "./dist",
+			"context": "browser"
+		}
+	},
+	"dependencies": {
+		"phaser": "^3.55.2",
+		"typescript": "^4.8.4"
+	},
+	"devDependencies": {
+		"parcel": "^2.7.0",
+		"push-dir": "^0.4.1"
+	},
+	"config": {
+		"commitizen": {
+			"path": "git-cz"
+		}
+	}
+}
