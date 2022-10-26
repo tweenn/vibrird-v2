@@ -1,3 +1,3 @@
-import game from './game';
+import appInitiator from "./init";
 
-game();
+appInitiator();

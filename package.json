@@ -1,11 +1,10 @@
 {
-	"name": "phaser3-parcel-typescript",
+	"name": "vibrird-v2",
 	"version": "1.0.0",
-	"description": "A template to use phaser with typescript and parcel bundler",
+	"description": "The vibrird project, now on phaser 3 with web as the main deployment target",
 	"main": "src/index.ts",
-	"repository": "git@github.com:tweenn/phaser3-parcel-typescript.git",
+	"repository": "git@github.com:tweenn/vibrird-v2.git",
 	"author": "Felipe Zuntini <felipezuntini@hotmail.com>",
-	"license": "MIT",
 	"private": false,
 	"scripts": {
 		"clean:dist": "rm -rf ./dist/",
@@ -13,7 +12,7 @@
 		"clean": "yarn clean:dist && yarn clean:cache",
 		"build": "yarn clean && parcel build --target prod",
 		"serve": "yarn clean && parcel --target dev --port 1234",
-		"deploy": "yarn build --public-url ../phaser3-parcel-typescript && push-dir --dir=dist --branch=gh-pages --force --cleanup"
+		"deploy": "yarn build --public-url ../vibrird-v2 && push-dir --dir=dist --branch=gh-pages --force --cleanup"
 	},
 	"targets": {
 		"dev": {
@@ -38,6 +37,10 @@
 		"typescript": "^4.8.4"
 	},
 	"devDependencies": {
+		"@types/node": "^18.11.5",
+		"@types/web-bluetooth": "^0.0.16",
+		"buffer": "^6.0.3",
+		"events": "^3.3.0",
 		"parcel": "^2.7.0",
 		"push-dir": "^0.4.1"
 	},
