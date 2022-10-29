@@ -1,6 +1,5 @@
 
-export default (context: Phaser.Scene) => {
-	const animationBaseVelocity = 15000;
+export default (context: Phaser.Scene, animationBaseVelocity = 15000) => {
 	const imageWidth = 928;
 	const imageScale = 3.5;
 
