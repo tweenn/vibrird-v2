@@ -7,12 +7,14 @@
 	"author": "Felipe Zuntini <felipezuntini@hotmail.com>",
 	"private": false,
 	"scripts": {
+		"clean": "yarn clean:dist && yarn clean:cache",
 		"clean:dist": "rm -rf ./dist/",
 		"clean:cache": "rm -rf ./.parcel-cache",
-		"clean": "yarn clean:dist && yarn clean:cache",
 		"build": "yarn clean && parcel build --target prod",
+		"build:ghpages": "yarn build --public-url ../vibrird-v2",
 		"serve": "yarn clean && parcel --target dev --port 1234",
-		"deploy": "yarn build --public-url ../vibrird-v2 && push-dir --dir=dist --branch=gh-pages --force --cleanup"
+		"deploy:ghpages": "push-dir --dir=dist --branch=gh-pages --force --cleanup",
+		"publish:ghpages": ". ./__devops__/deploy/gh-pages.sh"
 	},
 	"targets": {
 		"dev": {
