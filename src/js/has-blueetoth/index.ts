@@ -1,9 +1,7 @@
 
 export default async () => {
-	const hasBlueetoth = await navigator.bluetooth.getAvailability()
-	if (!hasBlueetoth) {
+	window.hasBluetooth = await navigator.bluetooth.getAvailability()
+	if (!window.hasBluetooth) {
 		console.log('Ferrou mermão!');
 	}
-
-	return hasBlueetoth;
 }

@@ -1,13 +1,13 @@
 import security from './security';
-// import hasBlueetoth from './has-blueetoth';
+import hasBlueetoth from './has-blueetoth';
 import buttplug from './buttplug';
 import game from './game';
 
 export default async () => {
 	await security();
 	await buttplug();
+	await hasBlueetoth();
 
-	// const shouldProceed = await hasBlueetoth();
 	game();
 
 	// window.clicked = false;

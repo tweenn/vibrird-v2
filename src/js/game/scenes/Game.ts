@@ -22,4 +22,4 @@ export default class Demo extends Phaser.Scene {
 			repeat: -1
 		});
 	}
-}
+};
