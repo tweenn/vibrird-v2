@@ -5,6 +5,19 @@ import {
 	loadMainMenu
 } from '../../helpers/sprite-loader';
 
+import {
+	buttonBluetooth,
+	buttonNewGame,
+	buttonAbout
+} from './buttons';
+
+import bySomeone from './by-someone';
+
+import {
+	overlayAgeConsente,
+	overlayNoBluetooth
+} from './overlay';
+
 import addForestBackgroundAnimations from '../../helpers/forest-background-animations';
 
 export default class Menu extends Phaser.Scene {
@@ -37,21 +50,16 @@ export default class Menu extends Phaser.Scene {
 		const mainMenuBackground = this.add.image(width * 0.5, height * 0.55, 'mainMenuBackground');
 		mainMenuBackground.scale = 0.75;
 
-		const mainMenuButton = this.add.image(width * 0.5, height * 0.5, 'mainMenuButton').setInteractive();
-		mainMenuButton.scale = 1.25;
+		buttonNewGame(this);
+		buttonBluetooth(this);
+		buttonAbout(this);
 
-		mainMenuButton.on('pointerover', () => {
-			mainMenuButton.setTint(0xffc7c7);
-		});
+		bySomeone(this);
 
-		mainMenuButton.on('pointerout', () => {
-			mainMenuButton.clearTint();
-		});
+		if (!window.hasBluetooth) {
+			overlayNoBluetooth(this);
+		}
 
-		mainMenuButton.on('pointerdown', () => {
-			if (window.hasBluetooth) {
-				window.unityButtplugClient.startScanning();
-			}
-		});
+		overlayAgeConsente(this);
 	}
 }
