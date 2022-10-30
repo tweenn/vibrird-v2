@@ -1,20 +1,16 @@
-import security from './security';
-import hasBlueetoth from './has-blueetoth';
+import forceHttps from './helpers/force-https';
+import {
+	check as ageConsentCheck
+} from './helpers/age-consent';
+import hasBlueetoth from './helpers/has-blueetoth';
 import buttplug from './buttplug';
 import game from './game';
 
 export default async () => {
-	await security();
+	await forceHttps();
 	await buttplug();
+	ageConsentCheck();
 	await hasBlueetoth();
 
 	game();
-
-	// window.clicked = false;
-	// document.body.onclick = () => {
-	// 	if (!window.clicked) {
-	// 		window.clicked = true;
-	// 		window.unityButtplugClient.startScanning();
-	// 	}
-	// }
 }
