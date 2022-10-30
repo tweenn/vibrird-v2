@@ -11,8 +11,14 @@ export default (context: Phaser.Scene) => {
 	}).button;
 
 	if (window.hasBluetooth) {
-		button.on('pointerdown', () => {
-			window.unityButtplugClient.startScanning();
+		button.on('pointerdown', async () => {
+			await window.vibrirdButtplugClient.startScanning();
+			
+			// TODO STILL A TBD
+			await new Promise(r => setTimeout(r, 2000));
+			window.vibrirdToy.vibrate(2.0);
+			await new Promise(r => setTimeout(r, 1000));
+			await window.vibrirdToy.stop();
 		});
 	}
 }

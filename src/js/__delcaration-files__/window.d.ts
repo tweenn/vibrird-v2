@@ -1,3 +1,5 @@
 
+declare var vibrirdButtplugClient: any;
+declare var vibrirdToy: any;
 declare var hasBluetooth: boolean;
-declare var unityButtplugClient: any;
+declare var ageConsent: boolean;

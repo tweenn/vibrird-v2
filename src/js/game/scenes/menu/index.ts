@@ -60,6 +60,8 @@ export default class Menu extends Phaser.Scene {
 			overlayNoBluetooth(this);
 		}
 
-		overlayAgeConsente(this);
+		if (!window.ageConsent) {
+			overlayAgeConsente(this);
+		}
 	}
 }

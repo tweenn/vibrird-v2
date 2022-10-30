@@ -1,5 +1,8 @@
 
 import addOverlay from '../add-overlay';
+import {
+	confirm as ageConsentConfirm
+} from '../../../../helpers/age-consent'
 
 export default (context: Phaser.Scene) => {
 	const overlayText = `
@@ -20,6 +23,9 @@ export default (context: Phaser.Scene) => {
 
 	addOverlay(context, {
 		overlayText,
-		buttonText: 'I\'M AN ADULT'
+		buttonText: 'I\'M AN ADULT',
+		buttonCallBack: () => {
+			ageConsentConfirm();
+		}
 	});
 };
