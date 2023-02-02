@@ -22,7 +22,10 @@ export default class GameEasy extends Phaser.Scene {
 			repeat: -1
 		});
 
+		window?.vibrirdToy?.vibrate(0.1);
+
 		window.setTimeout(() => {
+			window?.vibrirdToy?.stop();
 			this.scene.get('GameScene').reloadMenu();
 		}, 2000)
 	}
