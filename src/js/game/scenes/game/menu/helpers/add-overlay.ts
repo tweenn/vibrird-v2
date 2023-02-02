@@ -4,7 +4,7 @@ import addButton from './add-button';
 export default (context: Phaser.Scene, {
 	overlayText = '',
 	buttonText = '',
-	buttonCallBack = () => {}
+	buttonCallBack = () => { }
 }) => {
 	const width = context.cameras.main.width * 0.5;
 	const height = context.cameras.main.height * 0.5;

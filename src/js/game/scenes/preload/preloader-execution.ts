@@ -87,6 +87,6 @@ export default (context: Phaser.Scene) => {
 		loadingText.destroy();
 		percentText.destroy();
 		assetText.destroy();
-		context.scene.start('MenuScene');
+		context.scene.start('GameScene');
 	});
 };

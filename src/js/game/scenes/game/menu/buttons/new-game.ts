@@ -1,5 +1,6 @@
 
-import addButton from "../add-button";
+import addButton from "../helpers/add-button";
+import { overlayNewGame } from '../overlay';
 
 export default (context: Phaser.Scene) => {
 	const button = addButton(context, {
@@ -11,6 +12,6 @@ export default (context: Phaser.Scene) => {
 	}).button;
 
 	button.on('pointerdown', () => {
-		console.log('New Game');
+		overlayNewGame(context);
 	});
 }

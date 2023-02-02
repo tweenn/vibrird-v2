@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import phaserLogo from '../../../assets/phaser3-logo.png';
+import phaserLogo from '../../../../../../assets/phaser3-logo.png';
 
-export default class Demo extends Phaser.Scene {
+export default class GameEasy extends Phaser.Scene {
 	constructor() {
-		super('GameScene');
+		super('GameModeEasyScene');
 	}
 
 	preload() {
@@ -15,11 +15,15 @@ export default class Demo extends Phaser.Scene {
 
 		this.tweens.add({
 			targets: logo,
-			y: 360,
-			duration: 1500,
+			y: 720,
+			duration: 500,
 			ease: 'Sine.inOut',
 			yoyo: true,
 			repeat: -1
 		});
+
+		window.setTimeout(() => {
+			this.scene.get('GameScene').reloadMenu();
+		}, 2000)
 	}
 };

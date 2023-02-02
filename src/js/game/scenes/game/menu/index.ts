@@ -1,9 +1,8 @@
 import Phaser from 'phaser';
 
 import {
-	loadForestBackground,
 	loadMainMenu
-} from '../../helpers/sprite-loader';
+} from '../../../helpers/sprite-loader';
 
 import {
 	buttonBluetooth,
@@ -18,23 +17,23 @@ import {
 	overlayNoBluetooth
 } from './overlay';
 
-import addForestBackgroundAnimations from '../../helpers/forest-background-animations';
-
-export default class Menu extends Phaser.Scene {
+export default class GameMenu extends Phaser.Scene {
 	constructor() {
-		super('MenuScene');
+		super('GameMenuScene');
 	}
 
 	preload() {
-		loadForestBackground(this);
 		loadMainMenu(this);
 	}
 
 	create() {
+		this.scene.moveUp();
+		this.menuCreate();
+	}
+
+	menuCreate() {
 		const width = this.cameras.main.width;
 		const height = this.cameras.main.height;
-
-		addForestBackgroundAnimations(this, 75000);
 
 		const logo = this.add.image(720 * 0.5, 100, 'logo');
 

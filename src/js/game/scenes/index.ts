@@ -1,10 +1,13 @@
-import GameScene from './game';
 import PreloadScene from './preload';
-import MenuScene from './menu';
-
+import GameScene from './game';
+import GameBackgroundScene from './game/background';
+import GameMenuScene from './game/menu';
+import GameModeEasyScene from './game/modes/easy';
 
 export default [
 	PreloadScene,
-	MenuScene,
-	GameScene
+	GameScene,
+	GameBackgroundScene,
+	GameMenuScene,
+	GameModeEasyScene,
 ];

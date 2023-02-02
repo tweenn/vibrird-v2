@@ -1,5 +1,5 @@
 
-import addOverlay from '../add-overlay';
+import addOverlay from '../helpers/add-overlay';
 
 export default (context: Phaser.Scene) => {
 	const overlayText = `

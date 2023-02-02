@@ -1,10 +1,12 @@
 
 import overlayAbout from './about';
-import overlayNoBluetooth from './no-blueetoth';
 import overlayAgeConsente from './age-consent';
+import overlayNewGame from './new-game';
+import overlayNoBluetooth from './no-blueetoth';
 
 export {
 	overlayAbout,
+	overlayAgeConsente,
+	overlayNewGame,
 	overlayNoBluetooth,
-	overlayAgeConsente
 };

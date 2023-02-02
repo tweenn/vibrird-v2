@@ -1,5 +1,5 @@
 
-import addButton from "../add-button";
+import addButton from "../helpers/add-button";
 import { overlayAbout } from '../overlay';
 
 export default (context: Phaser.Scene) => {

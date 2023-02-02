@@ -1,8 +1,8 @@
 
-import addOverlay from '../add-overlay';
+import addOverlay from '../helpers/add-overlay';
 import {
 	confirm as ageConsentConfirm
-} from '../../../../helpers/age-consent'
+} from '../../../../../helpers/age-consent'
 
 export default (context: Phaser.Scene) => {
 	const overlayText = `
