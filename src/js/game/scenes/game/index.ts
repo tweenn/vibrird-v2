@@ -8,6 +8,9 @@ export default class GameScene extends Phaser.Scene {
 	create() {
 		this.scene.launch('GameBackgroundScene');
 		this.scene.launch('GameMenuScene');
+		setTimeout(() => {
+			this.loadEasyMode();
+		}, 100)
 	}
 
 	loadEasyMode() {
