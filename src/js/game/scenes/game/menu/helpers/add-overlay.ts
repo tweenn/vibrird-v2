@@ -25,7 +25,7 @@ export default (context: Phaser.Scene, {
 
 	overlayBox.fillStyle(0x000, 0.75);
 
-	const overlayBackground = context.add.image(width, height, 'mainMenuBackgroundSquare');
+	const overlayBackground = context.add.image(width, height, 'main-menu-background-square');
 	overlayBackground.scale = 0.7;
 
 	const buttonClose = addButton(context, {

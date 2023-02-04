@@ -4,16 +4,18 @@ import pipeBody from '../../../../../assets/sprites/pipe/pipe-body.png';
 import coin from '../../../../../assets/sprites/coin/coin.png';
 import bird from '../../../../../assets/sprites/bird/vibrird.png';
 
+import gameCoinBackground from '../../../../../assets/sprites/ui/game-coin-background.png';
+
 import spriteLoader from '../sprite-loader';
 
 export default (context: Phaser.Scene) => {
 	const spritesToLoad: SpritesToLoadArray = [
 		{
-			id: 'pipehead',
+			id: 'pipe-head',
 			path: pipeHead
 		},
 		{
-			id: 'pipebody',
+			id: 'pipe-body',
 			path: pipeBody
 		},
 		{
@@ -29,6 +31,10 @@ export default (context: Phaser.Scene) => {
 				height: 150,
 				frames: 7
 			}
+		},
+		{
+			id: 'game-coin-background',
+			path: gameCoinBackground
 		}
 	];
 

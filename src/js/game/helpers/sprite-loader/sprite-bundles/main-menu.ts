@@ -12,15 +12,15 @@ import spriteLoader from '../sprite-loader';
 export default (context: Phaser.Scene) => {
 	const spritesToLoad: SpritesToLoadArray = [
 		{
-			id: 'mainMenuBackground',
+			id: 'main-menu-background',
 			path: mainMenuBackground
 		},
 		{
-			id: 'mainMenuBackgroundSquare',
+			id: 'main-menu-background-square',
 			path: mainMenuBackgroundSquare
 		},
 		{
-			id: 'mainMenuButton',
+			id: 'main-menu-button',
 			path: mainMenuButton
 		},
 		// TODO: DELETE THIS
