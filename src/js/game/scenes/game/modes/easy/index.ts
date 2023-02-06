@@ -4,10 +4,31 @@ import {
 	loadGameElements
 } from '../../../../helpers/sprite-loader/';
 
+import randomNumber from '../../../../../helpers/random-number';
+
+import isGodMode from '../../../../helpers/god-mode';
 
 export default class GameEasy extends Phaser.Scene {
+	isGodMode: boolean = false;
+
+	coinValue: number = 0;
+	uiCoinValue: Phaser.GameObjects.Text | undefined;
+
+	bird: Phaser.GameObjects.Sprite | undefined;
+	boundary: Phaser.GameObjects.Rectangle | undefined;
+
+	coins: Phaser.GameObjects.Group | undefined;
+	pipeContainers: Phaser.GameObjects.Group | undefined;
+	pipePhysics: Phaser.GameObjects.Group | undefined;
+
+	pipeVelocity: number = 200;
+
 	constructor() {
 		super('GameModeEasyScene');
+
+		this.coinValue = 0;
+
+		this.isGodMode = isGodMode();
 	}
 
 	preload() {
@@ -18,10 +39,13 @@ export default class GameEasy extends Phaser.Scene {
 		this.createBird();
 		this.createBoundary();
 		this.createPipeGroups();
-		this.createPipe();
+		this.createPipes();
 		this.addCollisions();
 		this.createGameUi();
-		this.debug();
+
+		if (this.isGodMode) {
+			this.debug();
+		}
 	}
 
 	update() {
@@ -116,7 +140,7 @@ export default class GameEasy extends Phaser.Scene {
 		this.pipePhysics = this.add.group();
 	}
 
-	createPipe() {
+	createPipe(startingPointXThreshold = 0) {
 		const canvasHeight = this.cameras.main.height;
 		const canvasHeightHalf = canvasHeight * 0.5;
 		const canvasHeightQuarter = canvasHeight * 0.25;
@@ -125,12 +149,11 @@ export default class GameEasy extends Phaser.Scene {
 		const pipeScale = 3.25;
 		const coinScale = 0.8;
 
-		const gameSceneCenterDistance = 200;
+		const gameSceneCenterDistance = 150;
 
 		const startingPoint = {
-			// x: canvasWidth + 64,
-			x: canvasWidth - 64,
-			y: canvasHeightHalf
+			x: canvasWidth + 64 + startingPointXThreshold,
+			y: canvasHeightHalf + randomNumber(-100, 100)
 		}
 
 		const coin = this.add.image(0, 0, 'coin')
@@ -213,19 +236,18 @@ export default class GameEasy extends Phaser.Scene {
 			gameObject.body.allowGravity = false;
 		});
 
-		container.body.setVelocityX(-200);
+		container.body.setVelocityX(-(this.pipeVelocity));
 
 		this.coins.add(coin);
 		this.pipeContainers.add(container);
 		this.pipePhysics.add(containerTop);
 		this.pipePhysics.add(containerBottom);
+	}
 
-		/*
-			coin
-		*/
-		this.input.enableDebug(containerTop);
-		this.input.enableDebug(containerBottom);
-		this.input.enableDebug(container);
+	createPipes() {
+		for (let i = 0; i < 4; i++) {
+			this.createPipe(i * 215);
+		}
 	}
 
 	addCollisions() {
@@ -237,33 +259,44 @@ export default class GameEasy extends Phaser.Scene {
 			// console.log(bird, pipe);
 		};
 
-		const coinOverlap = (bird, coin) => {
-			if (coin.visible) {
-				coin.visible = false;
-
-				this.coinValue = this.coinValue || 0;
-				this.coinValue++;
-				this.uiCoinValue.text = this.coinValue;
-			}
-		};
-
 		this.physics.add.overlap(this.bird, this.boundary, boundaryOverlap, null, this);
 		
-		this.physics.add.overlap(this.bird, this.coins, coinOverlap, null, this);
+		this.physics.add.overlap(this.bird, this.coins, this.addPoints, null, this);
 
 		this.physics.add.overlap(this.bird, this.pipePhysics, pipeOverlap, null, this);
 	}
 
+	addPoints(
+		bird: Phaser.GameObjects.Sprite,
+		coin: Phaser.GameObjects.Image
+	) {
+		if (coin.visible) {
+			coin.visible = false;
+
+			this.coinValue++;
+			this.uiCoinValue.text = this.coinValue.toString();
+
+			this.pipeVelocity++;
+		}
+	}
+
 	resetPipe(pipeContainer) {
+		const startingPoint = {
+			x: this.cameras.main.width + 64,
+			y: this.cameras.main.height * 0.5 + randomNumber(-100, 100)
+		};
+
+		pipeContainer.setPosition(startingPoint.x, startingPoint.y);
+
 		pipeContainer.list.forEach((container) => {
 			container.visible = true;
 		});
 
-
-		pipeContainer.x = 1200;
+		pipeContainer.body.setVelocityX(-(this.pipeVelocity));
 	}
 
 	gameOver() {
+		this.coinValue = 0;
 		window?.vibrirdToy?.stop();
 		this.scene.get('GameScene').reloadMenu();
 	}
