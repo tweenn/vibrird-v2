@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+import isGodMode from './helpers/god-mode';
+
 export default {
 	type: Phaser.AUTO,
 	parent: 'game',
@@ -14,7 +16,7 @@ export default {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 },
-			debug: true
+			debug: isGodMode()
 		}
 	},
 };
