@@ -5,6 +5,7 @@ import coin from '../../../../../assets/sprites/coin/coin.png';
 import bird from '../../../../../assets/sprites/bird/vibrird.png';
 
 import gameCoinBackground from '../../../../../assets/sprites/ui/game-coin-background.png';
+import mainMenuButtonSmall from '../../../../../assets/sprites/ui/menu-button-small.png';
 
 import spriteLoader from '../sprite-loader';
 
@@ -35,7 +36,11 @@ export default (context: Phaser.Scene) => {
 		{
 			id: 'game-coin-background',
 			path: gameCoinBackground
-		}
+		},
+		{
+			id: 'menu-button-small',
+			path: mainMenuButtonSmall
+		},
 	];
 
 	spriteLoader(context, spritesToLoad);

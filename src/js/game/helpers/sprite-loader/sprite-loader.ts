@@ -4,14 +4,16 @@ export default (context: Phaser.Scene, spritesToLoad: SpritesToLoadArray) => {
 		const id = imageObject.id;
 		const path = imageObject.path;
 
-		if (imageObject.type === 'spritesheet') {
+		const type: string = imageObject?.type || 'image';
+
+		if (type === 'spritesheet') {
 			const frameWidth = imageObject.properties?.width || 0;
 			const frameHeight = imageObject.properties?.height || 0;
 			const endFrame = imageObject.properties?.frames || 1;
 
 			context.load.spritesheet(id, path, { frameWidth, frameHeight, endFrame });
 		} else {
-			context.load.image(id, path);
+			context.load?.[type](id, path);
 		}
 	});
 };
