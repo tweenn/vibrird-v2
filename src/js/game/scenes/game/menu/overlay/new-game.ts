@@ -35,9 +35,9 @@ export default (context: Phaser.Scene) => {
 	});
 
 	buttonEasy.button .on('pointerdown', () => {
-		context.scene.get('GameScene').loadEasyMode();
+		context.scene.get('GameLoaderScene').loadEasyMode();
 	});
 	buttonHardcore.button.on('pointerdown', () => {
-		context.scene.get('GameScene').loadHardMode();
+		context.scene.get('GameLoaderScene').loadHardMode();
 	});
 };

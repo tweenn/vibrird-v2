@@ -1,14 +1,12 @@
 import Phaser from 'phaser';
 
-import {
-	loadGameElements
-} from '../../../../helpers/sprite-loader/';
+import addButton from './helpers/add-button';
 
 import randomNumber from '../../../../../helpers/random-number';
 
 import isGodMode from '../../../../helpers/god-mode';
 
-export default class GameEasy extends Phaser.Scene {
+export default class GameMode extends Phaser.Scene {
 	isGodMode: boolean = false;
 
 	coinValue: number = 0;
@@ -16,23 +14,41 @@ export default class GameEasy extends Phaser.Scene {
 
 	bird: Phaser.GameObjects.Sprite | undefined;
 	boundary: Phaser.GameObjects.Rectangle | undefined;
+	touchZone: Phaser.GameObjects.Rectangle | undefined;
 
 	coins: Phaser.GameObjects.Group | undefined;
 	pipeContainers: Phaser.GameObjects.Group | undefined;
 	pipePhysics: Phaser.GameObjects.Group | undefined;
 
+	buttonPauseSprite: Phaser.GameObjects.Image | undefined;
+
 	pipeVelocity: number = 200;
+	birdVelocity: number = 200;
 
-	constructor() {
-		super('GameModeEasyScene');
+	vibrationMinimum: number = 0.01;
+	vibrationPerCoin: number = 0.01;
 
+	gameOverByPipe: boolean = false;
+	gameOverByBoundary: boolean = false;
+
+	isPaused: boolean = false;
+
+	pausedState = {
+		birdVelocity: {
+			y: 0
+		}
+	}
+
+	constructor(key: string) {
+		super(key);
+
+		this.resetValues();
+	}
+
+	resetValues() {
 		this.coinValue = 0;
 
 		this.isGodMode = isGodMode();
-	}
-
-	preload() {
-		loadGameElements(this);
 	}
 
 	create() {
@@ -42,6 +58,7 @@ export default class GameEasy extends Phaser.Scene {
 		this.createPipes();
 		this.addCollisions();
 		this.createGameUi();
+		this.createTouchZone();
 
 		if (this.isGodMode) {
 			this.debug();
@@ -49,11 +66,7 @@ export default class GameEasy extends Phaser.Scene {
 	}
 
 	update() {
-		this.input.on('pointerdown', () => {
-			this.bird.body.setVelocityY(-200);
-		}, this);
-
-		const pipeContainers = this.pipeContainers.getChildren();
+		const pipeContainers = this.pipeContainers?.getChildren() || [];
 		pipeContainers.forEach((pipeContainer) => {
 			if (pipeContainer.x < -120) {
 				this.resetPipe(pipeContainer);
@@ -62,17 +75,22 @@ export default class GameEasy extends Phaser.Scene {
 	}
 
 	createGameUi() {
-		this.add.sprite(0, 0, 'game-coin-background')
+		this.createGameUiCoins();
+		this.createGameUiButtons();
+	}
+
+	createGameUiCoins() {
+		this.add.sprite(15, 20, 'game-coin-background')
 			.setScale(0.2)
 			.setOrigin(0, 0);
 		
-		this.add.image(162, 12, 'coin')
+		this.add.image(177, 32, 'coin')
 			.setScale(0.45)
 			.setOrigin(0, 0)
 		
 		this.uiCoinValue = this.make.text({
-			x: 158,
-			y: 30,
+			x: 173,
+			y: 50,
 			text: this.coinValue || 0,
 			style: {
 				fontFamily: 'monospace',
@@ -84,6 +102,69 @@ export default class GameEasy extends Phaser.Scene {
 				y: 0.5
 			}
 		});
+	}
+
+	createGameUiButtons() {
+		const canvasWidth = this.cameras.main.width;
+
+		const buttonConfig = addButton(this, {
+			position: {
+				x: canvasWidth - 80,
+				y: 10
+			}
+		});
+
+		buttonConfig.on('pointerdown', () => {
+			this.gameOver();
+		});
+
+		this.add.image((canvasWidth - 60), 30, 'icon-settings')
+			.setOrigin(0, 0);
+		
+		
+		const buttonPause = addButton(this, {
+			position: {
+				x: canvasWidth - 170,
+				y: 10
+			}
+		});
+
+		buttonPause.on('pointerdown', () => {
+			this.isPaused = !this.isPaused;
+
+			this.createGameUiButtonsPlay();
+
+			if (this.isPaused) {
+				this.doPause();
+			} else {
+				this.doPlay();
+			}
+		});
+
+		this.createGameUiButtonsPlay();
+	}
+
+	createGameUiButtonsPlay() {
+		const icon = !this.isPaused
+			? 'icon-pause'
+			: 'icon-play';
+
+		this.buttonPauseSprite?.destroy();
+		this.buttonPauseSprite = this.add.image((this.cameras.main.width - 150), 30, icon)
+			.setOrigin(0, 0);
+	}
+
+	createTouchZone() {
+		const y = 110;
+		const touchZone = this.add.rectangle(0, y, this.cameras.main.width, this.cameras.main.height - y)
+			.setOrigin(0, 0)
+			.setInteractive();
+		
+		touchZone.on('pointerdown', () => {
+			this.bird?.body?.setVelocityY(-this.birdVelocity);
+		}, this);
+
+		this.touchZone = touchZone;
 	}
 
 	createBoundary() {
@@ -251,12 +332,16 @@ export default class GameEasy extends Phaser.Scene {
 	}
 
 	addCollisions() {
-		const boundaryOverlap = (bird, boundary) => {
-			this.gameOver();
+		const boundaryOverlap = (_bird, _boundary) => {
+			if (this.gameOverByBoundary) {
+				this.gameOver();
+			}
 		};
 
-		const pipeOverlap = (bird, pipe) => {
-			// console.log(bird, pipe);
+		const pipeOverlap = (_bird, _pipe) => {
+			if (this.gameOverByPipe) {
+				this.gameOver();
+			}
 		};
 
 		this.physics.add.overlap(this.bird, this.boundary, boundaryOverlap, null, this);
@@ -267,7 +352,7 @@ export default class GameEasy extends Phaser.Scene {
 	}
 
 	addPoints(
-		bird: Phaser.GameObjects.Sprite,
+		_bird: Phaser.GameObjects.Sprite,
 		coin: Phaser.GameObjects.Image
 	) {
 		if (coin.visible) {
@@ -276,11 +361,11 @@ export default class GameEasy extends Phaser.Scene {
 			this.coinValue++;
 			this.uiCoinValue.text = this.coinValue.toString();
 
-			this.pipeVelocity++;
+			window?.vibrirdToy?.vibrate(this.vibrationMinimum + parseFloat((this.coinValue * this.vibrationPerCoin).toFixed(2)));
 		}
 	}
 
-	resetPipe(pipeContainer) {
+	resetPipe(pipeContainer: Phaser.GameObjects.Group) {
 		const startingPoint = {
 			x: this.cameras.main.width + 64,
 			y: this.cameras.main.height * 0.5 + randomNumber(-100, 100)
@@ -295,17 +380,54 @@ export default class GameEasy extends Phaser.Scene {
 		pipeContainer.body.setVelocityX(-(this.pipeVelocity));
 	}
 
+	doPause() {
+		console.log('pause');
+
+		const containers = this.pipeContainers?.getChildren() || [];
+
+		containers.forEach((container) => {
+			container.body.setVelocityX(0);
+		});
+
+		this.pausedState.birdVelocity.y = this.bird?.body?.velocity.y;
+		this.bird?.body?.setVelocityY(0);
+		this.bird.body.allowGravity = false;
+
+		this.anims.get('bird-fly').pause();
+
+		this.scene.get('GameBackgroundScene').changeAnimationsVelocity(0);
+	}
+
+	doPlay() {
+		console.log('play');
+
+		const containers = this.pipeContainers?.getChildren() || [];
+
+		containers.forEach((container) => {
+			container.body.setVelocityX(-(this.pipeVelocity));
+		});
+
+		this.bird?.body?.setVelocityY(this.pausedState.birdVelocity.y);
+		this.bird.body.allowGravity = true;
+
+		this.anims.get('bird-fly').resume();
+
+		// Need to improve this
+		this.scene.get('GameBackgroundScene').changeAnimationsVelocity(4);
+	}
+
 	gameOver() {
 		this.coinValue = 0;
 		window?.vibrirdToy?.stop();
-		this.scene.get('GameScene').reloadMenu();
+		this.scene.get('GameLoaderScene').reloadMenu();
 	}
 
 	debug() {
 		this.input.enableDebug(this.bird);
 		this.input.enableDebug(this.boundary);
+		this.input.enableDebug(this.touchZone);
 
-		const containers = this.pipeContainers.getChildren();
+		const containers = this.pipeContainers?.getChildren() || [];
 
 		containers.forEach((container) => {
 			this.input.enableDebug(container);

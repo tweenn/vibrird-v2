@@ -1,13 +1,15 @@
 import Phaser from 'phaser';
 
-export default class GameScene extends Phaser.Scene {
+export default class GameLoaderScene extends Phaser.Scene {
 	constructor() {
-		super('GameScene');
+		super('GameLoaderScene');
 	}
 
 	create() {
 		this.scene.launch('GameBackgroundScene');
 		this.scene.launch('GameMenuScene');
+		// TURN AROUND
+		// FIX THIS
 		setTimeout(() => {
 			this.loadEasyMode();
 		}, 100)
