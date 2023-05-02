@@ -1,6 +1,31 @@
 import Phaser from 'phaser';
 
+const enum ENUM_TIME_DIALATION {
+	STOP = 0,
+	MENU = 1,
+	MODE_EASY = 4,
+	MODE_NORMAL = 4,
+	MODE_HARD = 4
+};
+
+type TYPE_TIME_SCALE_DIALATION = {
+	STOP: number,
+	MENU: number,
+	MODE_EASY: number,
+	MODE_NORMAL: number,
+	MODE_HARD: number
+}
+
 export default class GameBackground extends Phaser.Scene {
+
+	timeScaleDialation: TYPE_TIME_SCALE_DIALATION = {
+		STOP: ENUM_TIME_DIALATION.STOP,
+		MENU: ENUM_TIME_DIALATION.MENU,
+		MODE_EASY: ENUM_TIME_DIALATION.MODE_EASY,
+		MODE_NORMAL: ENUM_TIME_DIALATION.MODE_NORMAL,
+		MODE_HARD: ENUM_TIME_DIALATION.MODE_HARD,
+	}
+
 	constructor() {
 		super('GameBackgroundScene');
 
@@ -96,7 +121,7 @@ export default class GameBackground extends Phaser.Scene {
 		], 12000);
 	}
 
-	changeAnimationsVelocity(timeScaleDialation) {
+	changeAnimationsVelocity(timeScaleDialation: ENUM_TIME_DIALATION) {
 		this.animations.forEach((animation) => {
 			animation.setTimeScale(timeScaleDialation);
 		});

@@ -6,7 +6,27 @@ import randomNumber from '../../../../../helpers/random-number';
 
 import isGodMode from '../../../../helpers/god-mode';
 
+const enum ENUM_GAME_MODES {
+	EASY = 0,
+	NORMAL = 1,
+	HARD = 2
+}
+
+type TYPE_GAME_MODES = {
+	EASY: number;
+	NORMAL: number,
+	HARD: number
+}
+
 export default class GameMode extends Phaser.Scene {
+	gameModes: TYPE_GAME_MODES = {
+		EASY: ENUM_GAME_MODES.EASY,
+		NORMAL: ENUM_GAME_MODES.NORMAL,
+		HARD: ENUM_GAME_MODES.HARD
+	};
+
+	gameMode: number = 0;
+	
 	isGodMode: boolean = false;
 
 	coinValue: number = 0;
@@ -36,6 +56,9 @@ export default class GameMode extends Phaser.Scene {
 	pausedState = {
 		birdVelocity: {
 			y: 0
+		},
+		toy: {
+			force: 0
 		}
 	}
 
@@ -361,7 +384,7 @@ export default class GameMode extends Phaser.Scene {
 			this.coinValue++;
 			this.uiCoinValue.text = this.coinValue.toString();
 
-			window?.vibrirdToy?.vibrate(this.vibrationMinimum + parseFloat((this.coinValue * this.vibrationPerCoin).toFixed(2)));
+			window?.vibrirdToy?.vibrate(this.toyTorque());
 		}
 	}
 
@@ -383,37 +406,70 @@ export default class GameMode extends Phaser.Scene {
 	doPause() {
 		console.log('pause');
 
+		// STOP PIPES
 		const containers = this.pipeContainers?.getChildren() || [];
 
 		containers.forEach((container) => {
 			container.body.setVelocityX(0);
 		});
 
+		// STOP BIRD
 		this.pausedState.birdVelocity.y = this.bird?.body?.velocity.y;
 		this.bird?.body?.setVelocityY(0);
 		this.bird.body.allowGravity = false;
 
 		this.anims.get('bird-fly').pause();
 
-		this.scene.get('GameBackgroundScene').changeAnimationsVelocity(0);
+		// STOP BACKGROUND
+		const gameBackgroundScene = this.scene.get('GameBackgroundScene');
+		const timeScaleDialation = gameBackgroundScene.timeScaleDialation.STOP;
+		gameBackgroundScene.changeAnimationsVelocity(timeScaleDialation);
+
+		// STOP TOY
+		window?.vibrirdToy?.stop();
 	}
 
 	doPlay() {
 		console.log('play');
 
+		// RETURN PIPES
 		const containers = this.pipeContainers?.getChildren() || [];
 
 		containers.forEach((container) => {
 			container.body.setVelocityX(-(this.pipeVelocity));
 		});
 
+		// RETURN BIRD
 		this.bird?.body?.setVelocityY(this.pausedState.birdVelocity.y);
 		this.bird.body.allowGravity = true;
 
 		this.anims.get('bird-fly').resume();
 
-		// Need to improve this
-		this.scene.get('GameBackgroundScene').changeAnimationsVelocity(4);
+		// RETURN BACKGROUND
+		const gameBackgroundScene = this.scene.get('GameBackgroundScene');
+		let timeScaleDialation;
+
+		switch (this.gameMode) {
+			case this.gameModes.HARD:
+				timeScaleDialation = gameBackgroundScene.timeScaleDialation.MODE_HARD;
+				break;
+			case this.gameModes.NORMAL:
+				timeScaleDialation = gameBackgroundScene.timeScaleDialation.MODE_NORMAL;
+				break;
+			case this.gameModes.EASY:
+			default:
+				timeScaleDialation = gameBackgroundScene.timeScaleDialation.MODE_EASY;
+				break;
+		}
+
+		gameBackgroundScene.changeAnimationsVelocity(timeScaleDialation);
+
+		// RETURN TOY
+		window?.vibrirdToy?.vibrate(this.toyTorque());
+	}
+
+	toyTorque() {
+		return this.vibrationMinimum + parseFloat((this.coinValue * this.vibrationPerCoin).toFixed(2));
 	}
 
 	gameOver() {

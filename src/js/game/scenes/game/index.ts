@@ -16,7 +16,10 @@ export default class GameLoaderScene extends Phaser.Scene {
 	}
 
 	loadEasyMode() {
-		this.scene.get('GameBackgroundScene').changeAnimationsVelocity(4);
+		const gameBackgroundScene = this.scene.get('GameBackgroundScene');
+		const timeScaleDialation = gameBackgroundScene.timeScaleDialation.MODE_EASY;
+		gameBackgroundScene.changeAnimationsVelocity(timeScaleDialation);
+
 		this.scene.get('GameMenuScene').scene.stop();
 		this.scene.launch('GameModeEasyScene');
 	}
@@ -27,7 +30,10 @@ export default class GameLoaderScene extends Phaser.Scene {
 	}
 
 	reloadMenu() {
-		this.scene.get('GameBackgroundScene').changeAnimationsVelocity(1);
+		const gameBackgroundScene = this.scene.get('GameBackgroundScene');
+		const timeScaleDialation = gameBackgroundScene.timeScaleDialation.MENU;
+		gameBackgroundScene.changeAnimationsVelocity(timeScaleDialation);
+
 		this.scene.get('GameModeEasyScene').scene.stop();
 		this.scene.get('GameMenuScene').scene.start();
 	}
