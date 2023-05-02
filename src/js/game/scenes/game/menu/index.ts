@@ -1,10 +1,6 @@
 import Phaser from 'phaser';
 
 import {
-	loadMainMenu
-} from '../../../helpers/sprite-loader';
-
-import {
 	buttonBluetooth,
 	buttonNewGame,
 	buttonAbout
@@ -20,10 +16,6 @@ import {
 export default class GameMenu extends Phaser.Scene {
 	constructor() {
 		super('GameMenuScene');
-	}
-
-	preload() {
-		loadMainMenu(this);
 	}
 
 	create() {

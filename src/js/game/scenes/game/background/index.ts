@@ -1,9 +1,5 @@
 import Phaser from 'phaser';
 
-import {
-	loadForestBackground
-} from '../../../helpers/sprite-loader';
-
 export default class GameBackground extends Phaser.Scene {
 	constructor() {
 		super('GameBackgroundScene');
@@ -14,10 +10,6 @@ export default class GameBackground extends Phaser.Scene {
 		this.imageWidth = 928;
 		this.imageScale = 3.5;
 		this.animationBaseVelocity = 75000;
-	}
-
-	preload() {
-		loadForestBackground(this);
 	}
 
 	create() {
