@@ -10,8 +10,9 @@ export default (context: Phaser.Scene, {
 	const width = context.cameras.main.width * 0.5;
 	const height = context.cameras.main.height * 0.57 + buttonSpaceY;
 
-	const button: Phaser.GameObjects.Image = context.add.image(width, height, 'main-menu-button').setInteractive();
-	button.scale = 1.25;
+	const button: Phaser.GameObjects.Image = context.add.image(width, height, 'menu-button')
+		.setScale(1.25)
+		.setInteractive();
 
 	if (buttonEnabled) {
 		button.on('pointerover', () => {

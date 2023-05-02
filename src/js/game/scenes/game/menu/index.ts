@@ -46,7 +46,7 @@ export default class GameMenu extends Phaser.Scene {
 			repeat: -1
 		});
 
-		const mainMenuBackground = this.add.image(width * 0.5, height * 0.55, 'main-menu-background');
+		const mainMenuBackground = this.add.image(width * 0.5, height * 0.55, 'menu-background');
 		mainMenuBackground.scale = 0.75;
 
 		buttonNewGame(this);
