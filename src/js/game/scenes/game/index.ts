@@ -25,8 +25,12 @@ export default class GameLoaderScene extends Phaser.Scene {
 	}
 
 	loadHardMode() {
-		// this.scene.get('GameMenuScene').scene.stop();
-		// this.scene.launch('GameModeHardScene');
+		const gameBackgroundScene = this.scene.get('GameBackgroundScene');
+		const timeScaleDialation = gameBackgroundScene.timeScaleDialation.MODE_HARD;
+		gameBackgroundScene.changeAnimationsVelocity(timeScaleDialation);
+
+		this.scene.get('GameMenuScene').scene.stop();
+		this.scene.launch('GameModeHardScene');
 	}
 
 	reloadMenu() {
@@ -35,6 +39,8 @@ export default class GameLoaderScene extends Phaser.Scene {
 		gameBackgroundScene.changeAnimationsVelocity(timeScaleDialation);
 
 		this.scene.get('GameModeEasyScene').scene.stop();
+		this.scene.get('GameModeNormalScene').scene.stop();
+		this.scene.get('GameModeHardScene').scene.stop();
 		this.scene.get('GameMenuScene').scene.start();
 	}
 };

@@ -26,15 +26,15 @@ export default class GameBackground extends Phaser.Scene {
 		MODE_HARD: ENUM_TIME_DIALATION.MODE_HARD,
 	}
 
+	images = {};
+	animations = [];
+
+	imageWidth: number = 928;
+	imageScale: number = 3.5;
+	animationBaseVelocity: number = 75000;
+
 	constructor() {
 		super('GameBackgroundScene');
-
-		this.images = {};
-		this.animations = [];
-
-		this.imageWidth = 928;
-		this.imageScale = 3.5;
-		this.animationBaseVelocity = 75000;
 	}
 
 	create() {
@@ -46,7 +46,7 @@ export default class GameBackground extends Phaser.Scene {
 		const backgroundImageryA = [];
 		const backgroundImageryB = [];
 
-		const imageIds = [];
+		const imageIds: string[] = [];
 
 		for (let i = 9; i >= 0; i--) {
 			imageIds.push(`bg000${i}`);
@@ -75,7 +75,7 @@ export default class GameBackground extends Phaser.Scene {
 	}
 
 	addAnimations() {
-		const addAnimation = (targetIds, extraDuration) => {
+		const addAnimation = (targetIds: number[], extraDuration: number) => {
 			const targets = targetIds.map((id) => {
 				return [
 					this.images[`bg000${id}a`],
